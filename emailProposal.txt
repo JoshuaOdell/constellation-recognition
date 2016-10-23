@@ -1,0 +1,12 @@
+Dr. Ben-Hur.
+
+For our project we'd like to analyze images and determine if they contain a certain star constellation.  We plan on obtaining training and validation data images from the Internet (some sites listed below).  We will analyze the images using Sci-Kit's image processing.  We've done some preliminary experiments to obtain the x,y coordinates and radius of starts within images.  
+Ultimately our goal is to simply determine if an image contains a single constellation of question.  We will have a single model for each constellation we wish to analyze.  We'll start with Ursa Major and maybe move into Cassiopeia, something that is pretty easy to spot.  If time permits we will also try constellations with less noticeable features.  The constellations that work and those that don't will be a focus of our results and what we learn.
+For our Model we will first start with using relative distance between each star as input.  We will normalize this data so that image scale will not be a factor.  If this model does not work out we will then try using the angle between each of the stars as well.  We will try to pick a finite set of stars to use for input, instead of using all the stars.  Our current experiment outputs the radius of the stars within the image.  That is a good place to start, but we may also need to find another way to determine which stars are important in an image.
+
+Our report will include the work we've done to process the image, and obtain the important stars, and their relation to each other.  We will also include the models that we used.  At this point we plan on using a Neural network with various hidden layer configurations.  We will also include our test results of the models that worked, and the constellations that we were able to find and those that we were not.
+
+
+Data image websites
+http://www.astrobin.com/
+https://www.flickr.com/
