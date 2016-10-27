@@ -87,3 +87,10 @@ ENV/
 
 # Rope project settings
 .ropeproject
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+*.blg
+*.bbl
+*.aux
+proposal.pdf
