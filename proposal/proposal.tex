@@ -33,12 +33,12 @@
 % \tableofcontents
 % \noindent\hrulefill
 
-\section{Project Type:  Existing algorithm/new problem}
+\section{Motivation}
 We will train a neural network to recognize playing cards within an image.  The goal being to eventually utilize this knowledge to create a system which a human could use as an opponent in a variety of games involving playing cards, for practice or potentially for competition.
 
 The abstract strategies behind various card games would be beyond the scope of this implementation, but this model could be used to bootstrap a system whose goal was to learn games such as poker by being able to observe games played by humans and identify the cards they play.
 
-\section{Project Introduction}
+\section{Tasks}
 The first step of the project will involve significant data collection. We need a large number of images of playing cards to be used as training and as testing data. Since we will need to train over so many of them, these images cannot be of very high resolution. Our rough procedure for data collection is as follows: 
 
 1) Photograph each playing card from ten different angles and zoom levels. Ensure each image is labeled according to the card in the image, and that for each card, at least one labeled corner of the card is visible. This should produce 520 labeled images. 
@@ -51,8 +51,27 @@ It will be interesting to see if the network is able to identify multiple cards 
 
 To implement the neural network, we can use a modern machine learning framework such as Theano or Tensorflow to make construction of the network as straightforward as possible, while allowing for the use of modern tools such as GPU processing \cite{gpu2}, \cite{gpu}.
 
+\section{Timeline}
+
+\section{Responsibiilities}
+
 \section{Technologies Explored}
-Here we should explain some of the other technolgies out there for doing the same thing, that we have chosen not to use, why they are not good enough. (Digital card games circumvent the need for image recognition but involve a learning curve to use the interface. Not too sure at the moment what other technologies do this.)
+
+\subsection{Edge Detection}
+There are several edge detection algorithms that could possible be used to locate a playing card within the image.  Some clipping and transformations can then be done to the image to make it more closely match a well known image.  After this we can run the image thorugh either a neural network or other pattern recognizer to determine which card most closely matches the image.
+
+This solution requires quite a bit of minipulation of the image.  In practice it might be more effective, however we wish to focus on a solution that utilizes a Neural network, and gives us a chance to utilize techniques that are more `machine learning' focused.
+
+
+\subsection{Geone}
+Another option is to use Geons, which are simple objects that our brains are adapt at looking for.  The idea here is that the image can be scanned for a set of object that are known, like an image of a heart or club.  The results of this scan are then used in analysis.  if 4 hears are found then chances are the card is a 4 of hearts.
+
+We have decided not to use this technique, as it involves a more brute force way of looking thorugh the image.  In practice this may be more efficient, since we have a finite set of objects, however we wish to focus on a solution that `learns' and utilizes more 
+
+
+
+
+(Digital card games circumvent the need for image recognition but involve a learning curve to use the interface. Not too sure at the moment what other technologies do this.)
 
 
 
