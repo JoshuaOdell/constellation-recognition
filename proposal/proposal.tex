@@ -51,28 +51,43 @@ It will be interesting to see if the network is able to identify multiple cards 
 
 To implement the neural network, we can use a modern machine learning framework such as Theano or Tensorflow to make construction of the network as straightforward as possible, while allowing for the use of modern tools such as GPU processing \cite{gpu2}, \cite{gpu}.
 
-\section{Timeline}
 
-\section{Responsibiilities}
-
-\section{Technologies Explored}
-
+\section{Other Technologies Explored}
 \subsection{Edge Detection}
 There are several edge detection algorithms that could possible be used to locate a playing card within the image.  Some clipping and transformations can then be done to the image to make it more closely match a well known image.  After this we can run the image thorugh either a neural network or other pattern recognizer to determine which card most closely matches the image.
 
 This solution requires quite a bit of minipulation of the image.  In practice it might be more effective, however we wish to focus on a solution that utilizes a Neural network, and gives us a chance to utilize techniques that are more `machine learning' focused.
-
 
 \subsection{Geone}
 Another option is to use Geons, which are simple objects that our brains are adapt at looking for.  The idea here is that the image can be scanned for a set of object that are known, like an image of a heart or club.  The results of this scan are then used in analysis.  if 4 hears are found then chances are the card is a 4 of hearts.
 
 We have decided not to use this technique, as it involves a more brute force way of looking thorugh the image.  In practice this may be more efficient, since we have a finite set of objects, however we wish to focus on a solution that `learns' and utilizes more 
 
+\section{Timeline and responsibilities}
+We will break the project into 3 phases listed below.  Each member of the group will be responsible for a piece of the project in each phase.  This is a rough estimate on work load and can possibly change as the project continues.
 
+\subsection{experiment: Complete Nov 7}
+Greg: create train / test data
 
+Josh: create Neural Network classes
 
-(Digital card games circumvent the need for image recognition but involve a learning curve to use the interface. Not too sure at the moment what other technologies do this.)
+Brad: Create test bed and examine initial results
 
+\subsection{Test: Complete Nov 25}
+Brad: create automated framework for validating classification
+
+Greg: examine results
+
+Josh: graphs and presentation assets
+
+\subsection{report: Complete Dec 8}
+Josh: create report
+
+Brad: presentation
+
+Greg: Video / in class Presentation ()
+
+We are still unclear if we are to do a Video or an in class presentation given 2/3 of the team are distance students
 
 
 \nocite{*}
