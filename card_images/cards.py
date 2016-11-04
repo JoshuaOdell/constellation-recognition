@@ -9,7 +9,11 @@ import numpy as np
 # originals are 2048 x 1152 pixels
 rescale_percentage = 14
 
-# http://askubuntu.com/questions/84409/converting-images-to-ppm-p3-using-convert-command
+# How to make PPM images:
+	# http://askubuntu.com/questions/84409/converting-images-to-ppm-p3-using-convert-command
+# How to use the convert tool:
+	# http://www.imagemagick.org/script/convert.php
+# Uses the Linux "convert" command to transform large .jpg files into small .ppm files with various effects applied
 def convert_img(old_filename, new_filename):
 	global rescale_percentage
 	os.system("convert -auto-level -resize {}% -compress none {} {}".format(rescale_percentage,old_filename,new_filename))
@@ -22,9 +26,9 @@ def convert_img(old_filename, new_filename):
 	os.system("convert -auto-level -resize {}% -noise 3 -compress none {} {}_7.ppm".format(rescale_percentage,old_filename,new_filename[:-4]))
 	os.system("convert -auto-level -resize {}% -paint 4 -compress none {} {}_8.ppm".format(rescale_percentage,old_filename,new_filename[:-4]))
 	os.system("convert -auto-level -resize {}% -enhance -compress none {} {}_9.ppm".format(rescale_percentage,old_filename,new_filename[:-4]))
-	os.system("convert -auto-level -resize {}% -blue-shift factor 1.2 -compress none {} {}_10.ppm".format(rescale_percentage,old_filename,new_filename[:-4]))
+	os.system("convert -auto-level -resize {}% -blue-shift 1.2 -compress none {} {}_10.ppm".format(rescale_percentage,old_filename,new_filename[:-4]))
 
-
+# Converts the original set of image data into the altered set of image data
 def convert_originals():
 	suits = os.listdir("original/")
 	dirs = os.listdir("./")
@@ -67,7 +71,11 @@ def parse_img(filename):
 
 def main():
 	# only need this call to convert_originals if you want to re-generate the input images (maybe at a different scale or something)
+	# This will delete the current "altered" directory and all the images inside, and then reproduce all the altered training images
+	#    and directories	
 	convert_originals()
+
+	# Read in all the image data; prepare it to be input for the NN
 	card_features = []
 	card_labels = []
 	suits = os.listdir("altered/")
@@ -79,7 +87,7 @@ def main():
 				X,y = parse_img("altered/{}/{}/{}".format(suit,card,img))
 				card_features.append(X)
 				card_labels.append(y)
-
 	print ("Data prepared for {} examples (each of size {} features) and {} corresponding class labels.".format(len(card_features),len(card_features[10]),len(card_labels)))
+
 
 main()
