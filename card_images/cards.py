@@ -12,7 +12,18 @@ rescale_percentage = 14
 # http://askubuntu.com/questions/84409/converting-images-to-ppm-p3-using-convert-command
 def convert_img(old_filename, new_filename):
 	global rescale_percentage
-	os.system("convert -resize {}% -compress none {} {}".format(rescale_percentage,old_filename,new_filename))
+	os.system("convert -auto-level -resize {}% -compress none {} {}".format(rescale_percentage,old_filename,new_filename))
+	os.system("convert -auto-level -resize {}% -rotate 90 -compress none {} {}_1.ppm".format(rescale_percentage,old_filename,new_filename[:-4]))
+	os.system("convert -auto-level -resize {}% -rotate 180 -compress none {} {}_2.ppm".format(rescale_percentage,old_filename,new_filename[:-4]))
+	os.system("convert -auto-level -resize {}% -rotate 270 -compress none {} {}_3.ppm".format(rescale_percentage,old_filename,new_filename[:-4]))
+	os.system("convert -auto-level -resize {}% -rotate 90 -compress none {} {}_4.ppm".format(rescale_percentage,old_filename,new_filename[:-4]))
+	os.system("convert -auto-level -resize {}% -polaroid 10 -compress none {} {}_5.ppm".format(rescale_percentage,old_filename,new_filename[:-4]))
+	os.system("convert -auto-level -resize {}% -normalize -compress none {} {}_6.ppm".format(rescale_percentage,old_filename,new_filename[:-4]))
+	os.system("convert -auto-level -resize {}% -noise 3 -compress none {} {}_7.ppm".format(rescale_percentage,old_filename,new_filename[:-4]))
+	os.system("convert -auto-level -resize {}% -paint 4 -compress none {} {}_8.ppm".format(rescale_percentage,old_filename,new_filename[:-4]))
+	os.system("convert -auto-level -resize {}% -enhance -compress none {} {}_9.ppm".format(rescale_percentage,old_filename,new_filename[:-4]))
+	os.system("convert -auto-level -resize {}% -blue-shift factor 1.2 -compress none {} {}_10.ppm".format(rescale_percentage,old_filename,new_filename[:-4]))
+
 
 def convert_originals():
 	suits = os.listdir("original/")
@@ -56,7 +67,7 @@ def parse_img(filename):
 
 def main():
 	# only need this call to convert_originals if you want to re-generate the input images (maybe at a different scale or something)
-	# convert_originals()
+	convert_originals()
 	card_features = []
 	card_labels = []
 	suits = os.listdir("altered/")
