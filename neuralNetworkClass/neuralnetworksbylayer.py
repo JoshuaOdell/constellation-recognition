@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 import mlutils as ml
 import random #for random.sample in epsilonGreedy
 from copy import copy
+import gc  # to start garbage collection in function purge()
+import sys  # for sys.float_info.epsilon in NeuralNetworkClassifier._objectiveF
 #import numpy.lib.stride_tricks as npst  # for convolutional net
 import pdb
 import time
@@ -191,6 +193,12 @@ class NeuralNetworkByLayers:
         weightMatrices = [layer.W for layer in self.layers]
         ml.draw(weightMatrices, inputNames, outputNames)
 
+    def purge(self):
+        """Release all matrices other than the weights."""
+        for layer in self.layers:
+            layer.purge()
+        gc.collect()
+        
     def __repr__(self):
         str = 'NeuralNetwork(' + ',\n              '.join(['{!r}'.format(layer) for layer in self.layers])
         # {})'.format(self.layers)
@@ -214,10 +222,16 @@ class NeuralNetwork(NeuralNetworkByLayers):
     def _createAllButLastLayer(self,nUnits): # *args):
         layers = []
         ni = nUnits[0]
-        for nu in nUnits[1:-1]:
-            layers.append(TanhLayer(ni,nu))
-            ni = nu
-        return layers,ni
+        if nUnits[1] == 0:
+            # no hidden layers
+            if len(nUnits) > 3:
+                raise ValueError(" In NeuralNetwork, if second element of number of units list is 0, then no hidden layers will be constructed. In this case, the length of the list of number of units must be 3.")
+            return layers,ni
+        else:
+            for nu in nUnits[1:-1]:
+                layers.append(TanhLayer(ni,nu))
+                ni = nu
+            return layers,ni
 
     def _createFinalLayer(self,ni,nu):
         return LinearLayer(ni,nu)
@@ -233,8 +247,9 @@ class NeuralNetworkClassifier(NeuralNetwork):  # ByLayers):
 
     def _preProcessTargets(self,T):
         self.classes,counts = np.unique(T,return_counts=True)
+        #  Comment out following because data may not have samples from all clases
         if self.layers[-1].nUnits != len(self.classes)-1:
-            raise ValueError(" In NeuralNetworkClassifier, the number of outputs must be one less than\n the number of classes in the training data. The given number of outputs\n is %d and number of classes is %d. Try changing the number of outputs in the\n call to NeuralNetworkClassifier()." % (self.nus[-1], len(self.classes)))
+            raise ValueError(" In NeuralNetworkClassifier, the number of outputs must be one less than\n the number of classes in the training data. The given number of outputs\n is %d and number of classes is %d. Try changing the number of outputs in the\n call to NeuralNetworkClassifier()." % (self.layers[-1].nUnits, len(self.classes)))
         self.mostCommonClass = self.classes[np.argmax(counts)]  # to break ties, in use
         # make indicator variables for target classes
         Ti = (T == self.classes).astype(int)
@@ -245,6 +260,7 @@ class NeuralNetworkClassifier(NeuralNetwork):  # ByLayers):
             # if isinstance(self.layers[0],ConvolutionalLayer):
             #     print('_objectiveF, updateConv is',self.layers[0].updateConvolution)
             Y = self._forwardPass(X)
+            Y[Y==0] = sys.float_info.epsilon
             return -np.mean(T * np.log(Y))
 
     def _gradF(self,w, X,T):
@@ -287,9 +303,8 @@ class NeuralNetworkConvolutional(NeuralNetwork):
             return
         # check number of dimensions to convolve over
         allSizes = [len(inputSize)] + [len(a) for a in windowSizes] + [len(a) for a in windowStrides]
-        if allSizes[1:] != allSizes[:-1]:
-            print("NeuralNetworkConvolutional: ERROR. len(inputSize) and length of each windowSizes and windowStrides are not equal.")
-            return
+        if np.any(allSizes[1:] != allSizes[:-1]):
+            raise ValueError("NeuralNetworkConvolutional: ERROR. len(inputSize) and length of each windowSizes and windowStrides are not equal.")
         nLayers = len(nUnits)-1
         nConvLayers = len(windowSizes)
         if nLayers < nConvLayers:
@@ -306,6 +321,7 @@ class NeuralNetworkConvolutional(NeuralNetwork):
                                                  windowSizes[layeri],
                                                  windowStrides[layeri],
                                                  nUnits[layeri+1]))
+            # print('nwindows -1',layers[-1].nWindows,'-1 nUnits',layers[-1].nUnits)
             nInputsNextLayer = np.prod(layers[-1].nWindows) * layers[-1].nUnits
         else:
             nInputsNextLayer = nUnits[0]
@@ -315,6 +331,7 @@ class NeuralNetworkConvolutional(NeuralNetwork):
             nInputsNextLayer = nUnits[layeri+1]
         
         return layers, nInputsNextLayer
+
 
 # Multiple inheritance explained: http://www.python-course.eu/python3_multiple_inheritance.php
 

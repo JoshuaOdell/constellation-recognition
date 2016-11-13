@@ -252,73 +252,100 @@ def rowsInFolds(folds,ks):
 
 ######################################################################
 
-def trainValidateTestKFolds(trainf,evaluatef,X,T,parameterSets,nFolds,shuffle=False,verbose=False):
+def trainValidateTestKFolds(trainf,evaluatef,X,T,parameterSets,nFolds,
+                            shuffle=False,classification=False,verbose=False):
     # Randomly arrange row indices
     rowIndices = np.arange(X.shape[0])
     if shuffle:
         np.random.shuffle(rowIndices)
-    # Calculate number of samples in each of the nFolds folds
-    nSamples = X.shape[0]
-    nEach = int(nSamples / nFolds)
-    if nEach == 0:
-        raise ValueError("partitionKFolds: Number of samples in each fold is 0.")
-    # Calculate the starting and stopping row index for each fold.
-    # Store in startsStops as list of (start,stop) pairs
-    starts = np.arange(0,nEach*nFolds,nEach)
-    stops = starts + nEach
-    stops[-1] = nSamples
-    startsStops = list(zip(starts,stops))
+    if classification:
+        isNewBetterThanOld = lambda new,old: new > old
+        folds = {}
+        classes = np.unique(T)
+        for c in classes:
+            classIndices = rowIndices[np.where(T[rowIndices,:] == c)[0]]
+            nInClass = len(classIndices)
+            nEach = int(nInClass / nFolds)
+            starts = np.arange(0,nEach*nFolds,nEach)
+            stops = starts + nEach
+            stops[-1] = nInClass
+            # startsStops = np.vstack((rowIndices[starts],rowIndices[stops])).T
+            folds[c] = [classIndices, starts, stops]
+    else:
+        isNewBetterThanOld = lambda new,old: new < old
+        # Calculate number of samples in each of the nFolds folds
+        nSamples = X.shape[0]
+        nEach = int(nSamples / nFolds)
+        if nEach == 0:
+            raise ValueError("trainValidateTestKFolds: Number of samples in each fold is 0.")
+        # Calculate the starting and stopping row index for each fold.
+        # Store in startsStops as list of (start,stop) pairs
+        starts = np.arange(0,nEach*nFolds,nEach)
+        stops = starts + nEach
+        stops[-1] = nSamples
+        startsStops = list(zip(starts,stops))
+        
     # Repeat with testFold taking each single fold, one at a time
     results = []
     for testFold in range(nFolds):
         # Leaving the testFold out, for each validate fold, train on remaining
         # folds and evaluate on validate fold. Collect theseRepeat with validate
+        # Construct Xtest and Ttest
+        if classification:
+            rows = rowsInFold(folds,testFold)
+        else:
+            a,b = startsStops[testFold]
+            rows = rowIndices[a:b]
+        Xtest = X[rows,:]
+        Ttest = T[rows,:]
+
         bestParms = None
-        bestValidationError = 0
         for parms in parameterSets:
-            validateErrorSum = 0
+            validateEvaluationSum = 0
             for validateFold in range(nFolds):
                 if testFold == validateFold:
                     continue
+                # Construct Xtrain and Ttrain
                 trainFolds = np.setdiff1d(range(nFolds), [testFold,validateFold])
-                rows = []
-                for tf in trainFolds:
-                    a,b = startsStops[tf]                
-                    rows += rowIndices[a:b].tolist()
+                if classification:
+                    rows = rowsInFolds(folds,trainFolds)
+                else:
+                    rows = []
+                    for tf in trainFolds:
+                        a,b = startsStops[tf]                
+                        rows += rowIndices[a:b].tolist()
                 Xtrain = X[rows,:]
                 Ttrain = T[rows,:]
                 # Construct Xvalidate and Tvalidate
-                a,b = startsStops[validateFold]
-                rows = rowIndices[a:b]
+                if classification:
+                    rows = rowsInFold(folds,validateFold)
+                else:
+                    a,b = startsStops[validateFold]
+                    rows = rowIndices[a:b]
                 Xvalidate = X[rows,:]
                 Tvalidate = T[rows,:]
 
                 model = trainf(Xtrain,Ttrain,parms)
-                validateError = evaluatef(model,Xvalidate,Tvalidate)
-                validateErrorSum += validateError
-            validateError = validateErrorSum / nFolds
-            if bestParms is None or validateError < bestValidationError:
+                validateEvaluation = evaluatef(model,Xvalidate,Tvalidate)
+                validateEvaluationSum += validateEvaluation
+            validateEvaluation = validateEvaluationSum / (nFolds-1)
+            if bestParms is None or isNewBetterThanOld(validateEvaluation,bestValidationEvaluation): 
                 bestParms = parms
-                bestValidationError = validateError
+                bestValidationEvaluation = validateEvaluation
 
-        a,b = startsStops[testFold]
-        rows = rowIndices[a:b]
-        Xtest = X[rows,:]
-        Ttest = T[rows,:]
 
         newXtrain = np.vstack((Xtrain,Xvalidate))
         newTtrain = np.vstack((Ttrain,Tvalidate))
         model = trainf(newXtrain,newTtrain,bestParms)
-        trainError = evaluatef(model,newXtrain,newTtrain)
-        testError = evaluatef(model,Xtest,Ttest)
+        trainEvaluation = evaluatef(model,newXtrain,newTtrain)
+        testEvaluation = evaluatef(model,Xtest,Ttest)
 
-        resultThisTestFold = [bestParms, trainError,
-                              bestValidationError, testError]
+        resultThisTestFold = [bestParms, trainEvaluation,
+                              bestValidationEvaluation, testEvaluation]
         results.append(resultThisTestFold)
         if verbose:
             print(resultThisTestFold)
     return results
-
 
 
 ######################################################################
@@ -477,7 +504,7 @@ def draw(W, inputNames = None, outputNames = None, gray = False):
                               sum([w.shape[1-i%2] for i,w in enumerate(W)]))
 
     largestDim = max(xlim,ylim)
-    scaleW = 60 /  largestDimNWeights / maxw
+    scaleW = 2000 /  largestDimNWeights / maxw
     # print(largestDim,largestDimNWeights,maxw,scaleW)
 
     ax = plt.gca()

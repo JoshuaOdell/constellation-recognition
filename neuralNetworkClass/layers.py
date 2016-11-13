@@ -24,7 +24,6 @@ class LinearLayer:
     def _forwardPass(self, X):
         self.X = X
         self.Y = np.dot(X, self.W[1:, :]) + self.W[0:1, :]
-        print(self.Y)
         return self.Y
 
     def _backwardPass(self, delta):
@@ -37,6 +36,11 @@ class LinearLayer:
 
         deltaPreviousLayer = np.dot(delta, self.W[1:,:].T)
         return deltaPreviousLayer
+
+    def purge(self):
+        """Release all matrices other than weights."""
+        self.X = None
+        self.Y = None
 
     def __repr__(self):
         return "LinearLayer({},{})".format(self.nInputs,self.nUnits)
@@ -155,7 +159,7 @@ class ConvolutionalLayer(TanhLayer):
         self.nUnits = nUnits
         # self.nWindows = np.array([int(ni/stridei) - windowi + 1
         #                  for (ni,windowi,stridei) in zip(self.inputSizes[:-1],self.windowSizes,self.windowStrides)])
-        self.nWindows = np.array([int(0.5 + (ni - windowi + 1) / stridei)
+        self.nWindows = np.array([max(1,int((ni - windowi + 1) / stridei))
                          for (ni,windowi,stridei) in zip(self.inputSizes[:-1],self.windowSizes,self.windowStrides)])
         # self.nWindows[self.nWindows==0] = 1
         # print(self.nWindows)
@@ -243,6 +247,13 @@ class ConvolutionalLayer(TanhLayer):
         # keep self.Yw for backpropping
         return self.Y
 
+    def purge(self):
+        """Release all matrices other than weights."""
+        self.Xw = None
+        self.Yw = None
+        self.X = None
+        self.Y = None
+        
     def _info(self):
         print('nSamples:',self.nSamples)
         print('inputSizes',self.inputSizes)
