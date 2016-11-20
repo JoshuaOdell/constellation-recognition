@@ -25,3 +25,13 @@ https://www.tensorflow.org/versions/r0.11/how_tos/summaries_and_tensorboard/inde
 THIS DESCRIBES HOW TO VISUALIZE TRAINING LAYERS IN TENSORFLOW
 
 http://stackoverflow.com/questions/33802336/visualizing-output-of-convolutional-layer-in-tensorflow
+
+
+Here is an excellent video overview -> retraining with tensorflow.
+
+https://www.youtube.com/watch?v=QfNvhPx5Px8
+
+
+Here is full code for retraining the final layer of the classifier for new images.
+
+https://github.com/tensorflow/tensorflow/blob/master/tensorflow/examples/image_retraining/retrain.py
