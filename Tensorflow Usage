@@ -1,0 +1,27 @@
+Ive been playing with this code for tensorflow.
+
+https://github.com/tensorflow/tensorflow/blob/master/tensorflow/models/image/imagenet/classify_image.py
+
+It downloads an image inception pre-trained model.(inception)   then it downloads an image of a Panda and classifies it (cropped_panda.jpg).  It places the data in the folder tmp/imagenet from root.
+
+You can download random images and see how well it classifies them.  It gives each classifier a number between zero and 1.0.  It does not care about dimensions.  I tested it with cards it has no pre-trained data for playing cards.  I tested it on other animals it seems to work well.
+
+In order to install tensorflow you will need to have at least ubuntu 14.  Then use the PIP installation described in the following link.(the other ones do not work)
+
+https://www.tensorflow.org/versions/r0.11/get_started/os_setup.html.
+
+TO DO LIST
+
+THIS DESCRIBED HOW TO RETRAIN THE FINAL LAYER FOR NEW IMAGES
+
+https://www.tensorflow.org/versions/r0.9/how_tos/image_retraining/index.html
+
+
+THIS DESCRIBES HOW TO PRINT OUT REPORTS SUCH AS LEARNING RATES/GRAPHS FROM TENSORFLOW
+
+https://www.tensorflow.org/versions/r0.11/how_tos/summaries_and_tensorboard/index.html
+
+
+THIS DESCRIBES HOW TO VISUALIZE TRAINING LAYERS IN TENSORFLOW
+
+http://stackoverflow.com/questions/33802336/visualizing-output-of-convolutional-layer-in-tensorflow
