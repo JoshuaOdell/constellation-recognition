@@ -1,0 +1,64 @@
+Training set size 34 images per card x 52 cards = 1768 cards
+16000 training steps
+
+Test set size 10 images per card x 52 cards = 520 cards
+Accuracy = 74% 
+
+Retraining of inceptionV3 model final 2 layers.  (bottleneck/autoencoder layer and final layer) 
+
+total= 520  correct= 385  percentage= 74.03846153846153 %
+
+
+Accuracy by Class
+10 clubs = 0.90 
+10 diamonds = 0.80 
+10 hearts = 0.70 
+10 spades = 0.40 
+2 clubs = 0.70 
+2 diamonds = 0.50 
+2 hearts = 0.80 
+2 spades = 0.70 
+3 clubs = 1.00 
+3 diamonds = 0.90 
+3 hearts = 0.80 
+3 spades = 0.90 
+4 clubs = 0.70 
+4 diamonds = 1.00 
+4 hearts = 0.40 
+4 spades = 0.50 
+5 clubs = 0.90 
+5 diamonds = 0.90 
+5 hearts = 0.80 
+5 spades = 0.80 
+6 clubs = 0.60 
+6 diamonds = 0.80 
+6 hearts = 0.90 
+6 spades = 0.50 
+7 clubs = 0.80 
+7 diamonds = 0.60 
+7 hearts = 0.80 
+7 spades = 0.50 
+8 clubs = 0.30 
+8 diamonds = 0.70 
+8 hearts = 0.90 
+8 spades = 0.80 
+9 clubs = 0.80 
+9 diamonds = 0.60 
+9 hearts = 0.70 
+9 spades = 0.40 
+ace clubs = 1.00 
+ace diamonds = 0.90 
+ace hearts = 0.70 
+ace spades = 1.00 
+jack clubs = 0.70 
+jack diamonds = 0.80 
+jack hearts = 0.40 
+jack spades = 0.80 
+king clubs = 0.90 
+king diamonds = 0.80 
+king hearts = 0.80 
+king spades = 0.70 
+queen clubs = 0.70 
+queen diamonds = 0.90 
+queen hearts = 0.80 
+queen spades = 0.80
