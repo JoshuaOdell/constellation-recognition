@@ -1,0 +1,7 @@
+Training set size 34 images per card x 52 cards = 1768 cards
+16000 training steps
+
+Test set size 10 images per card x 52 cards = 520 cards
+Accuracy = 74% 
+
+Retraining of inceptionV3 model final 2 layers.  (bottleneck/autoencoder layer and final layer) 
