@@ -1,0 +1,60 @@
+# of images per training class 114 x 52 = 5929
+(34 originals rotate 180  - rotate 90)
+
+32000 training steps
+
+total= 520  correct= 465  percentage= 89.42307692307692 %
+Accuracy by Class
+10 clubs = 0.90 
+10 diamonds = 0.90 
+10 hearts = 0.90 
+10 spades = 0.90 
+2 clubs = 0.90 
+2 diamonds = 0.80 
+2 hearts = 0.80 
+2 spades = 0.90 
+3 clubs = 1.00 
+3 diamonds = 0.80 
+3 hearts = 0.90 
+3 spades = 0.90 
+4 clubs = 0.90 
+4 diamonds = 1.00 
+4 hearts = 1.00 
+4 spades = 0.90 
+5 clubs = 1.00 
+5 diamonds = 1.00 
+5 hearts = 0.70 
+5 spades = 1.00 
+6 clubs = 0.80 
+6 diamonds = 0.90 
+6 hearts = 0.90 
+6 spades = 0.80 
+7 clubs = 0.70 
+7 diamonds = 1.00 
+7 hearts = 1.00 
+7 spades = 0.90 
+8 clubs = 0.80 
+8 diamonds = 0.90 
+8 hearts = 0.90 
+8 spades = 0.90 
+9 clubs = 0.70 
+9 diamonds = 0.90 
+9 hearts = 0.90 
+9 spades = 1.00 
+ace clubs = 1.00 
+ace diamonds = 0.90 
+ace hearts = 0.90 
+ace spades = 1.00 
+jack clubs = 0.80 
+jack diamonds = 1.00 
+jack hearts = 1.00 
+jack spades = 0.80 
+king clubs = 1.00 
+king diamonds = 0.80 
+king hearts = 0.80 
+king spades = 0.80 
+queen clubs = 0.90 
+queen diamonds = 1.00 
+queen hearts = 0.80 
+queen spades = 0.90 
+
